@@ -47,6 +47,13 @@ const CalendarDay: React.FC<CalendarDayProps> = ({ settlement, onSelect }) => {
     return date.getDate();
   };
 
+  const getMonth = (dateStr: string) => {
+    const date = new Date(dateStr + 'T00:00:00');
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[date.getMonth()];
+  };
+
   const getDayOfWeek = (dateStr: string) => {
     const date = new Date(dateStr + 'T00:00:00');
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -68,7 +75,10 @@ const CalendarDay: React.FC<CalendarDayProps> = ({ settlement, onSelect }) => {
     >
       <div className="flex justify-between items-start mb-1">
         <div>
-          <div className="text-lg font-bold text-gray-800">{formatDate(settlement.date)}</div>
+          <div className="flex items-baseline gap-1">
+            <span className="text-lg font-bold text-gray-800">{formatDate(settlement.date)}</span>
+            <span className="text-xs font-semibold text-gray-500 uppercase">{getMonth(settlement.date)}</span>
+          </div>
           <div className="text-xs text-gray-500">{getDayOfWeek(settlement.date)}</div>
         </div>
         {getStatusBadge()}
