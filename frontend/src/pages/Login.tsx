@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaLock, FaEnvelope, FaSignInAlt } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../services/api';
 import NewCSportLogo from '../components/NewCSportLogo';
 
 interface LoginProps {
@@ -24,7 +24,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:8000/auth/login', {
+      const response = await api.post('/auth/login', {
         email,
         password
       });
