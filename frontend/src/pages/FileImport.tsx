@@ -129,15 +129,23 @@ const FileImport: React.FC = () => {
       
       const errorDetail = error.response?.data?.detail;
       
-      if (typeof errorDetail === 'string') {
+      if (typeof errorDetail === 'string' && errorDetail.trim()) {
         toast.error(errorDetail);
       } else if (errorDetail?.message) {
         toast.error(errorDetail.message);
+      } else if (typeof errorDetail === 'object' && errorDetail !== null) {
+        toast.warning('File imported with errors — see details below');
       } else {
-        toast.error('Error importing file');
+        const status = error.response?.status;
+        if (status === 400) {
+          toast.error('File rejected: check filename format, headers, and payment method IDs');
+        } else if (status === 500) {
+          toast.error('Server error processing file. Check the file format and try again.');
+        } else {
+          toast.error('Error importing file. Please try again.');
+        }
       }
       
-      // Se houver detalhes do erro, exibir como resultado
       if (errorDetail && typeof errorDetail === 'object') {
         setImportResult(errorDetail as ImportResult);
       }

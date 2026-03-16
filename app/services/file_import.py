@@ -74,8 +74,7 @@ class FileImportService:
         
         if not match:
             raise ValueError(
-                "Nome do arquivo inválido. "
-                "Use o formato: transactions_YYYYMMDD.csv"
+                "Invalid filename. Expected format: transactions_YYYYMMDD.csv"
             )
         
         date_str = match.group(1)
@@ -84,8 +83,7 @@ class FileImportService:
             return file_date
         except ValueError:
             raise ValueError(
-                f"Data inválida no nome do arquivo: {date_str}. "
-                "Use o formato YYYYMMDD."
+                f"Invalid date in filename: {date_str}. Use YYYYMMDD format."
             )
     
     def validate_headers(self, df: pd.DataFrame) -> None:
@@ -94,9 +92,9 @@ class FileImportService:
         
         if actual_headers != self.EXPECTED_HEADERS:
             raise ValueError(
-                f"Headers do arquivo não correspondem ao esperado.\n"
-                f"Esperado: {self.EXPECTED_HEADERS}\n"
-                f"Recebido: {actual_headers}"
+                f"File headers do not match expected format.\n"
+                f"Expected: {self.EXPECTED_HEADERS}\n"
+                f"Found: {actual_headers}"
             )
     
     def validate_record_count(self, df: pd.DataFrame) -> tuple:
@@ -106,29 +104,24 @@ class FileImportService:
         Retorna: (dataframe sem última linha, total esperado)
         """
         if len(df) < 2:
-            raise ValueError("Arquivo deve conter ao menos 2 linhas (header + 1 registro + total)")
+            raise ValueError("File must have at least 2 lines (header + 1 record + total row)")
         
-        # A última linha contém o total
         last_row = df.iloc[-1]
         
-        # O total deve estar na primeira coluna (#register)
         try:
             total_expected = int(last_row['#register'])
         except (ValueError, TypeError):
             raise ValueError(
-                f"Última linha deve conter o total de registros no campo '#register'. "
-                f"Valor encontrado: {last_row['#register']}"
+                f"Last row must contain the total record count in '#register'. "
+                f"Value found: {last_row['#register']}"
             )
         
-        # Remover a última linha (linha de total)
         df_data = df.iloc[:-1]
         
-        # Validar batimento
         actual_records = len(df_data)
         if actual_records != total_expected:
             raise ValueError(
-                f"Batimento de registros falhou. "
-                f"Esperado: {total_expected}, Encontrado: {actual_records}"
+                f"Record count mismatch. Expected: {total_expected}, Found: {actual_records}"
             )
         
         return df_data, total_expected
@@ -141,7 +134,7 @@ class FileImportService:
         try:
             register = int(row['#register'])
         except (ValueError, TypeError):
-            errors.append(f"#register deve ser um inteiro: {row['#register']}")
+            errors.append(f"#register must be an integer: {row['#register']}")
         
         # Validar order_timestamp (timestamp)
         try:
@@ -150,13 +143,13 @@ class FileImportService:
             else:
                 order_timestamp = row['order_timestamp']
         except Exception as e:
-            errors.append(f"order_timestamp inválido: {row['order_timestamp']} - {str(e)}")
+            errors.append(f"Invalid order_timestamp: {row['order_timestamp']} - {str(e)}")
         
         # Validar payment_method_id (integer)
         try:
             payment_method_id = int(row['payment_method_id'])
         except (ValueError, TypeError):
-            errors.append(f"payment_method_id deve ser um inteiro: {row['payment_method_id']}")
+            errors.append(f"payment_method_id must be an integer: {row['payment_method_id']}")
         
         # Validar strings
         event_sponsor = str(row['event_sponsor'])[:100]
@@ -167,17 +160,17 @@ class FileImportService:
         try:
             number_of_items = int(row['#of_items_in_order'])
             if number_of_items < 1:
-                errors.append(f"#of_items_in_order deve ser maior que 0: {number_of_items}")
+                errors.append(f"#of_items_in_order must be greater than 0: {number_of_items}")
         except (ValueError, TypeError):
-            errors.append(f"#of_items_in_order deve ser um inteiro: {row['#of_items_in_order']}")
+            errors.append(f"#of_items_in_order must be an integer: {row['#of_items_in_order']}")
         
         # Validar total_order_value (float)
         try:
             total_order_value = float(row['total_order_value'])
             if total_order_value <= 0:
-                errors.append(f"total_order_value deve ser maior que 0: {total_order_value}")
+                errors.append(f"total_order_value must be greater than 0: {total_order_value}")
         except (ValueError, TypeError):
-            errors.append(f"total_order_value deve ser um número: {row['total_order_value']}")
+            errors.append(f"total_order_value must be a number: {row['total_order_value']}")
         
         # Validar type_transaction (string 10)
         transaction_type = str(row['type_transaction'])[:10]
@@ -273,7 +266,8 @@ class FileImportService:
                 
                 if not payment_method:
                     raise ValueError(
-                        f"Método de pagamento ID {validated_data['payment_method_id']} não encontrado"
+                        f"Payment method ID {validated_data['payment_method_id']} not found. "
+                        f"Please register it in Payment Methods before importing."
                     )
                 
                 # Adicionar informações de controle

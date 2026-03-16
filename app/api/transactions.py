@@ -108,7 +108,7 @@ async def import_transactions(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Erro ao processar arquivo: {str(e)}"
+            detail=f"Error processing file: {str(e)}" if str(e) else "Unexpected error processing file. Check that the file format and payment method IDs are correct.",
         )
 
 @router.get("/", response_model=List[TransactionWithPaymentMethod])
