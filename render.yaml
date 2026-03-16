@@ -1,0 +1,32 @@
+services:
+  # Backend API
+  - type: web
+    name: batimento-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
+databases:
+  # PostgreSQL Database
+  - name: batimento-db
+    databaseName: batimento_entradas
+    plan: free
+    region: oregon
+
+
+
