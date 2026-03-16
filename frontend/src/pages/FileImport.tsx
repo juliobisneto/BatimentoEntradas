@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
 import { FaFileUpload, FaCheckCircle, FaExclamationTriangle, FaTimesCircle, FaRedo } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import api from '../services/api';
@@ -45,13 +44,6 @@ const FileImport: React.FC = () => {
     // Validar extensão
     if (!file.name.endsWith('.csv')) {
       toast.error('Only CSV files are allowed');
-      return;
-    }
-
-    // Validar formato do nome
-    const filenamePattern = /^transactions_\d{8}\.csv$/;
-    if (!filenamePattern.test(file.name)) {
-      toast.error('Invalid filename format. Use: transactions_YYYYMMDD.csv');
       return;
     }
 
@@ -184,8 +176,7 @@ const FileImport: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className="max-w-4xl mx-auto py-6">
+    <div className="max-w-4xl mx-auto py-6">
         <div className="flex items-center gap-3 mb-6">
           <FaFileUpload className="text-3xl text-blue-600" />
           <h1 className="text-2xl font-bold text-gray-800">File Import</h1>
@@ -414,8 +405,7 @@ const FileImport: React.FC = () => {
             <li><strong>Last line:</strong> Must contain the total number of records in #register field</li>
           </ul>
         </div>
-      </div>
-    </Layout>
+    </div>
   );
 };
 
