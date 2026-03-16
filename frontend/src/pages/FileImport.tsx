@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '../components/Layout';
-import { FaFileUpload, FaCheckCircle, FaExclamationTriangle, FaTimesCircle, FaTrash, FaRedo } from 'react-icons/fa';
+import { FaFileUpload, FaCheckCircle, FaExclamationTriangle, FaTimesCircle, FaRedo } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import api from '../services/api';
 

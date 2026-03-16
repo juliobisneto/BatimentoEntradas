@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { dashboardAPI, paymentMethodsAPI } from '../services/api';
 import { PaymentCalendarData, DailySettlement } from '../types/calendar';
 import { PaymentMethod } from '../types/paymentMethod';
-import { FaCalendarAlt, FaChevronLeft, FaChevronRight, FaFilter, FaTimes } from 'react-icons/fa';
+import { FaCalendarAlt, FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 import CalendarDay from '../components/CalendarDay';
 import DayDetailModal from '../components/DayDetailModal';
 
